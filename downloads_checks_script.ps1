@@ -32,8 +32,8 @@ if ($copyFiles.Count -gt 0) {
         $prompt = Read-Host "`nDo you want to delete this file?`n$($file.Name)`n[Y/N]"
         if ($prompt -eq 'Y') {
             try {
-                Remove-Item -Path $file.FullName -Force
-                Write-Host "Deleted: $($file.FullName)" -ForegroundColor Green
+                Remove-Item -Path $file.Name -Force
+                Write-Host "Deleted: $($file.Name)" -ForegroundColor Green
             } catch {
                 Write-Host "Failed to delete: $($file.Name) -- $_" -ForegroundColor Red
             }
@@ -49,3 +49,4 @@ if ($copyFiles.Count -gt 0) {
     Write-Host "`nNo duplicate copies found." -ForegroundColor Green
 
 }
+
