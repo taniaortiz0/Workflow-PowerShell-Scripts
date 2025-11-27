@@ -1,14 +1,16 @@
-﻿# NOTE: I have placed some Foreground colors for user readability.
+# NOTE: I have placed some Foreground colors for user readability.
 
-$DownloadsDir = "$env:USERPROFILE\Downloads" #You can add \OneDrive before the \Downloads path to display the contents of the Downloads directory with OneDrive included.
+$DownloadsDir = "$env:USERPROFILE\Downloads" # Or "$env:USERPROFILE\OneDrive\Downloads"
 
 Write-Host "Contents of the Downloads folder:" -ForegroundColor Gray
 Write-Host "---------------------------------"
 
-Get-ChildItem -Path $DownloadsDir -File -Recurse | Select-Object Name, LastAccessTime
+Get-ChildItem -Path $DownloadsDir -File -Recurse |
+    Select-Object Name, LastAccessTime
 
-$Files = Get-ChildItem -Path $DownloadsDir -File -Recurse | Select-Object Name, LastAccessTime
+$Files = Get-ChildItem -Path $DownloadsDir -File -Recurse
 
+# Detect files with (number) patterns
 $copyFiles = $Files | Where-Object { $_.Name -match '\(\d+\)' }
 
 if ($copyFiles.Count -gt 0) {
@@ -16,7 +18,9 @@ if ($copyFiles.Count -gt 0) {
     Write-Host "`nDisplaying duplicate copies:" -ForegroundColor Yellow
     Write-Host "---------------------------------"
 
-    $copyFiles | Format-Table Name, LastAccessTime, FullName -AutoSize
+    $copyFiles |
+        Select-Object Name, LastAccessTime, FullName |
+        Format-Table -AutoSize
 
     # Single prompt to delete all
     $groupPrompt = Read-Host "`nDelete ALL duplicate copies listed above? (Y/N)"
@@ -37,3 +41,4 @@ if ($copyFiles.Count -gt 0) {
 } else {
     Write-Host "`nNo duplicate copies found." -ForegroundColor Green
 }
+
