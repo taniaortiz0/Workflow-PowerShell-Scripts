@@ -1,6 +1,6 @@
-﻿# Set the Downloads Directory
+# Set the Downloads Directory
 
-$DocumentsDir = "$env:USERPROFILE\OneDrive\Documents"
+$DocumentsDir = "$env:USERPROFILE\Documents" #You can add OneDrive if you have one
 
 Write-Host "Contents of the Documents folder:" -ForegroundColor Gray
 Write-Host "---------------------------------"
@@ -9,7 +9,7 @@ Write-Host "---------------------------------"
 
 Get-ChildItem -Path $DocumentsDir -File -Recurse | Select-Object Name, CreationTime, LastAccessTime, LastWriteTime
 
-#Making into a pointer/reference into the collection of objects
+# Making a pointer reference
 
 $Files = Get-ChildItem -Path $DocumentsDir -File -Recurse | Select-Object Name, CreationTime, LastAccessTime, LastWriteTime
 
