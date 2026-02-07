@@ -82,4 +82,24 @@ fi
 systemctl enable --now docker || true
 echo -e "${GREEN}Docker installed${NC}"
 
-echo -e "${GREEN}All packages installed! Log out/in for Docker group.${NC}"
+# Installing Ansible, Terraform, JQ, tmux, and htop
+echo -e "${GREEN}Installing core DevOps tools...${NC}"
+$PKG_INSTALL ansible terraform jq tmux htop
+echo -e "${GREEN}Ansible, Terraform, jq, tmux, htop installed${NC}"
+
+# Installing Kubernetes CLI
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+echo -e "${GREEN}kubectl installed${NC}"
+
+# Installing Prometheus and Grafana
+if [ "$PKG_MGR" = "apt" ]; then
+    $PKG_INSTALL software-properties-common
+    curl -fsSL https://packages.grafana.com/gpg.key | gpg --dearmor -o /usr/share/keyrings/grafana-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/grafana-archive-keyring.gpg] https://packages.grafana.com/oss/deb stable main" | tee /etc/apt/sources.list.d/grafana.list
+    $PKG_UPDATE
+    $PKG_INSTALL prometheus prometheus-node-exporter grafana
+    systemctl enable --now prometheus grafana-server || true
+fi
+
+echo -e "${GREEN}All packages installed!${NC}"
